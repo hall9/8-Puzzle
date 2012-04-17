@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import proj3.*;
+import proj3.Puzzle;
 
 public class Proj3 {
 
@@ -16,7 +16,7 @@ public class Proj3 {
 		String filepath = args[0];
 		 */
 
-		String filepath = "a1.cmds";
+		String filepath = "sample.cmds";
 		puzzlesolver(filepath);
 
 	}
@@ -97,6 +97,7 @@ public class Proj3 {
 		System.out.println("[*]Initial State(S0)");
 		System.out.println("[*]======================");
 		System.out.println("");
+		/*
 		for (int i = 0; i <= 2; i++) {
 			for (int k = 0; k <= 2; k++) {
 				System.out.print(initial[i][k]);
@@ -105,7 +106,7 @@ public class Proj3 {
 			System.out.println("");
 		}
 		
-		System.out.println("");
+		
 		
 		System.out.println("[*]Goal State(Sg)");
 		System.out.println("[*]======================");
@@ -119,10 +120,8 @@ public class Proj3 {
 			System.out.println("");
 		}
 		
-		System.out.println("");
-		System.out.println("");
-		p.solve(goal, initial);
-		
+		*/
+		p.solve(initial, goal);
 		
 	}
 }

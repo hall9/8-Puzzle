@@ -1,47 +1,100 @@
 package proj3;
-import java.util.Comparator;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.lang.*;
 import proj3.Tile;
 import proj3.BinaryHeap;
 
-public class Puzzle implements Comparator<Tile> {
+public class Puzzle {
 
-	BinaryHeap q = new BinaryHeap(); 
-
-	public void solve(int initial[][], int goal[][]) {
-
+	BinaryHeap<Tile> openQ = new BinaryHeap<Tile>();
+	LinkedList<Tile> closedTiles = new LinkedList<Tile>();
+	int goal[][];
+	
+	public void solve(int initial[][], int g[][]) {
+		openQ.makeEmpty();
+		goal = g;
+		
+		Tile initialTile = new Tile(initial, 0, heuristic(goal,initial), heuristic(goal,initial), null);
+		
+		printTile(initialTile);
+		
 		if (initial == goal) {
 			// The tiles are a match
 		}
 		else
 		{
-			Tile initialTile = new Tile(initial, 99,99,99, null);
-			initialTile.heuristic = 0;
-			initialTile.notMatch = notMatch(goal,initial);
-			initialTile.cost = initialTile.heuristic + initialTile.notMatch;
-			
-			int kids = genChildren(initialTile, goal);
+			openQ.insert(initialTile);
+			solver();
 		}
 	}
 	
-	private int notMatch (int goal[][], int current[][]) {
-		int numNotMatch = 0;
+	private void goalReached(Tile goalTile) {
+		System.out.println("[*]======================");
+		System.out.println("[*]Goal State(Sg) reached:");
+		System.out.println("");
+		printTile(goalTile);
+		System.out.println("[*]---------");
+		System.out.println("[*]Solution Cost is: " + goalTile.cost);
+		System.out.println("");
+		System.out.println("[*]Size of the openQ at end of search process: " + openQ.sizeOf());
+		System.out.println("");
+		
+		System.out.println("[*]First five(or Less) states removed from openQ: ");
+		int tilesClosed = 5;
+		if (closedTiles.size() < 5) {
+			tilesClosed = closedTiles.size();
+		}
+		
+		for (int i = 1; i <= tilesClosed; i++) {
+			System.out.println("");
+			System.out.println("[*]State #" + i);
+			System.out.println("");
+			printTile(closedTiles.remove());
+		}
+		
+	}
+	
+	private void solver() {
+		boolean solved = false;
+		
+		while (!openQ.isEmpty() && !solved) {
+			Tile sk = openQ.deleteMin();
+			
+			if (Arrays.deepEquals(sk.state, goal)) {
+				// sk is the goal state
+				solved = true;
+				goalReached(sk);
+			}
+			else {
+				genChildren(sk);
+				closedTiles.add(sk);
+			}	
+		}
+	}
+
+	private int heuristic (int goal[][], int current[][]) {
+		int heuristic = 0;
 		
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 3; k++) {
 				if (goal[i][k] != current[i][k]) {
-					numNotMatch += 1;
+					if (goal[i][k] != 0) {
+						heuristic += 1;
+					}
 				}
 			}
 		}
 		
-		return numNotMatch;
+		return heuristic;
 	}
 
-	private int genChildren (Tile current, int goal[][]) {
-		int x = 2;
-		int y = 2;
-
+	private void genChildren (Tile current) {
+		int x = -1;
+		int y = -1;
+		
 		current.status = false;
 
 		for (int i = 0; i < 3; i++) {
@@ -53,66 +106,100 @@ public class Puzzle implements Comparator<Tile> {
 			}
 		}
 		
-			Tile left = new Tile(null, 99,0,0, current);
-			Tile right = new Tile(null, 99,0,0, current);
-			Tile down = new Tile(null, 99,0,0, current);
-			Tile up = new Tile(null, 99,0,0, current);
+		Tile down = new Tile(null,99,99,99, current);
+		Tile right = new Tile(null, 99,99,99, current);
+		Tile left = new Tile(null, 99,99,99, current);
+		Tile up = new Tile(null, 99,99,99, current);
 
 			
 			//Moving Down
 			if (y != 2) {
-				down.state = current.state;
-				down.state[y][x] = current.state[y+1][x];
+				down.state = clone2dArray(current.state);
+				down.state[y][x] = down.state[y+1][x];
 				down.state[y+1][x] = 0;
-				down.notMatch = notMatch(goal, down.state);
-				down.heuristic = current.heuristic + 1;
-				down.cost = down.notMatch + down.heuristic;
+				down.numMoves = current.numMoves + 1;
+				down.heuristic = heuristic(goal, down.state);
+				down.cost = down.numMoves + down.heuristic;
 				
-				System.out.println("down");
-				printTile(down);
+				if (!checkAncestry (down, down.parent)) {
+					openQ.insert(down);
+				}
 			}
 
 			//Moving Right
 			if (x != 2) {
-				right.state = current.state;
-				right.state[y][x] = current.state [y][x+1];
+				right.state = clone2dArray(current.state);
+				right.state[y][x] =  right.state[y][x+1];
 				right.state[y][x+1] = 0;
-				right.notMatch = notMatch(goal, right.state);
-				right.heuristic = current.heuristic + 1;
-				right.cost = right.notMatch + right.heuristic;
+				right.numMoves = current.numMoves + 1;
+				right.heuristic = heuristic(goal, right.state);
+				right.cost = right.numMoves + right.heuristic;
 				
-				System.out.println("right");
-				printTile(right);
+				if (!checkAncestry (right, right.parent)) {
+					openQ.insert(right);
+				}
 			}
 
 			//Moving Left
 			if (x != 0) {
-				left.state = current.state;
-				left.state[y][x] =  current.state[y][x-1];
+				left.state = clone2dArray(current.state);
+				left.state[y][x] =  left.state[y][x-1];
 				left.state[y][x-1] = 0;
-				left.notMatch = notMatch(goal, left.state);
-				left.heuristic = current.heuristic + 1;
-				left.cost = left.notMatch + left.heuristic;
+				left.numMoves = current.numMoves + 1;
+				left.heuristic = heuristic(goal, left.state);
+				left.cost = left.numMoves + left.heuristic;
 				
-				System.out.println("left");
-				printTile(left);
+				if (!checkAncestry (left, left.parent)) {
+					openQ.insert(left);
+				}
 			}
 
 			//Moving Up
 			if (y != 0 ) {
-				up.state = current.state;
-				up.state[y][x] =  current.state[y-1][x];
+				up.state = clone2dArray(current.state);
+				up.state[y][x] =  up.state[y-1][x];
 				up.state[y-1][x] = 0;
-				up.notMatch = notMatch(goal, up.state);
-				up.heuristic = current.heuristic + 1;
-				up.cost = up.notMatch + up.heuristic;
+				up.numMoves = current.numMoves + 1;
+				up.heuristic = heuristic(goal, up.state);
+				up.cost = up.numMoves + up.heuristic;
 				
-				System.out.println("up");
-				printTile(up);
-			}
-			
-			
-		return 1;
+				if (!checkAncestry (up, up.parent)) {
+					openQ.insert(up);
+				}
+			}	
+	}
+	
+	private boolean checkAncestry (Tile current, Tile ancestor) {
+		boolean found;
+		
+		
+		if (ancestor == null) {
+			// not found, at the root
+			found = false;
+		}
+		else if ( Arrays.deepEquals(current.state, ancestor.state)) {
+			// found
+			found = true;
+		}
+		else {
+			// not found but going up the tree to see
+			found = checkAncestry(current, ancestor.parent);
+		}
+		
+		return found;
+	}
+	
+	public static int[][] clone2dArray(int[][] array) {
+		int rows = array.length;
+		
+		int[][] newArray = (int[][]) array.clone();
+		
+		for( int row = 0; row<rows; row++) {
+			newArray[row] = (int[]) array[row].clone();
+		}
+		
+		return newArray;
+		
 	}
 	
 	public void printTile (Tile tile) {
@@ -126,18 +213,7 @@ public class Puzzle implements Comparator<Tile> {
 		}
 		
 		System.out.println("Cost = " + tile.cost);
-		System.out.println("g = " + tile.notMatch);
+		System.out.println("g = " + tile.numMoves);
 		System.out.println("h = " + tile.heuristic);
-		
-		System.out.println("");
-		System.out.println("");
-		
 	}
-
-	@Override
-	public int compare(Tile o1, Tile o2) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
 }

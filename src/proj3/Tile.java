@@ -1,25 +1,37 @@
 package proj3;
 
-public class Tile {
+public class Tile implements Comparable<Tile> {
+	
+	@Override
+	public int compareTo(Tile t1) {
+		int smallerOrNot = 0;
+		
+		if (this.cost > t1.cost) {
+			smallerOrNot = 1;
+		}
+		else if (this.cost < t1.cost) {
+			smallerOrNot = -1;
+		}
+		
+		return smallerOrNot;
+	}
 
-	public Tile (int state1[][], int cost1, int notMatch1, int heuristic1, Tile parent1) {
+	public Tile (int state1[][], int numMoves1, int heuristic1, int cost1, Tile parent1) {
 		
 		state = state1;
-		cost = cost1;
-		notMatch = notMatch1;
+		numMoves = numMoves1;
 		heuristic = heuristic1;
+		cost = cost1;
 		parent = parent1;
 		status = true;
-		
 	}
 	
 	public int state[][];
-	public int cost;
-	public int notMatch;
+	public int numMoves;
 	public int heuristic;
+	public int cost;
 	public Tile parent;
 	public boolean status;
-	
 	
 	
 	/*public String toString() {

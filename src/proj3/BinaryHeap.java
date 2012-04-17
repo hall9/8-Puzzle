@@ -1,5 +1,7 @@
 package proj3;
 
+import proj3.Puzzle;
+
 // BinaryHeap class
 //
 // CONSTRUCTION: with optional capacity (that defaults to 100)
@@ -30,6 +32,11 @@ public class BinaryHeap<AnyType extends Comparable<? super AnyType>>
     public BinaryHeap( )
     {
         this( DEFAULT_CAPACITY );
+    }
+    
+    public int sizeOf() {
+    	
+    	return currentSize;
     }
 
     /**
