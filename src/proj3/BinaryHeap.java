@@ -1,7 +1,5 @@
 package proj3;
 
-import proj3.Puzzle;
-
 // BinaryHeap class
 //
 // CONSTRUCTION: with optional capacity (that defaults to 100)

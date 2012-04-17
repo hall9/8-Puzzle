@@ -11,16 +11,22 @@ import proj3.Puzzle;
 public class Proj3 {
 
 	public static void main(String[] args) throws IOException {
-		/*
 		 // Importing of the ant Dargs value
 		String filepath = args[0];
-		 */
-
-		String filepath = "sample.cmds";
+		 
+		/*
+		String filepath = "stress1.cmds";
+		*/
+		
 		puzzlesolver(filepath);
-
 	}
 
+	/**
+	 * This get the states within the file
+	 * 
+	 * @param filename	This is the file path to the given file
+	 * @throws IOException	Exception throw if the file can't be opened
+	 */
 	static void puzzlesolver (String filename) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(filename));
 

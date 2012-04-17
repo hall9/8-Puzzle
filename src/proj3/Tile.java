@@ -2,6 +2,11 @@ package proj3;
 
 public class Tile implements Comparable<Tile> {
 	
+	/**
+	 * implementing the comapareTo for the heap class
+	 * 
+	 * @param t1 the tile to compare with
+	 */
 	@Override
 	public int compareTo(Tile t1) {
 		int smallerOrNot = 0;
@@ -12,10 +17,28 @@ public class Tile implements Comparable<Tile> {
 		else if (this.cost < t1.cost) {
 			smallerOrNot = -1;
 		}
+		else {
+			if (this.numMoves > t1.numMoves ) {
+				smallerOrNot = 1;
+			}
+			else if (this.numMoves < t1.numMoves ) {
+				smallerOrNot = -1;
+			}
+		}
 		
 		return smallerOrNot;
 	}
+	
 
+	/**
+	 * When creating a new tile.
+	 * 
+	 * @param state1	The state of the puzzle 
+	 * @param numMoves1		The number of moves this tile has been thru to get where it is now
+	 * @param heuristic1	The number of elements within the state that don't match the goal state
+	 * @param cost1		The numMoves + heuristic
+	 * @param parent1	A pointer to its last move
+	 */
 	public Tile (int state1[][], int numMoves1, int heuristic1, int cost1, Tile parent1) {
 		
 		state = state1;
@@ -32,28 +55,4 @@ public class Tile implements Comparable<Tile> {
 	public int cost;
 	public Tile parent;
 	public boolean status;
-	
-	
-	/*public String toString() {
-		
-		String tile = "";
-		
-		for (int i = 0; i < 3; i++) {
-			for (int k = 0; k < 3; k++) {
-				tile.concat( String.valueOf(state[i][k]) );
-				tile.concat( "\n" );
-			}
-			tile.concat( "\n" );
-		}
-		
-		tile.concat( String.valueOf( cost ) );
-		tile.concat( String.valueOf( notMatch ) );
-		tile.concat( String.valueOf( heuristic ) );
-		
-		tile.concat( "\n" );
-		tile.concat( "\n" );
-		
-		return tile;
-	}*/
-	
 }
