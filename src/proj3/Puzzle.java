@@ -133,5 +133,11 @@ public class Puzzle implements Comparator<Tile> {
 		System.out.println("");
 		
 	}
+
+	@Override
+	public int compare(Tile o1, Tile o2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
