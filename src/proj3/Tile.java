@@ -1,7 +1,7 @@
 package proj3;
 
 public class Tile implements Comparable<Tile> {
-	
+
 	/**
 	 * implementing the comapareTo for the heap class
 	 * 
@@ -10,7 +10,7 @@ public class Tile implements Comparable<Tile> {
 	@Override
 	public int compareTo(Tile t1) {
 		int smallerOrNot = 0;
-		
+
 		if (this.cost > t1.cost) {
 			smallerOrNot = 1;
 		}
@@ -25,10 +25,10 @@ public class Tile implements Comparable<Tile> {
 				smallerOrNot = -1;
 			}
 		}
-		
+
 		return smallerOrNot;
 	}
-	
+
 
 	/**
 	 * When creating a new tile.
@@ -40,7 +40,7 @@ public class Tile implements Comparable<Tile> {
 	 * @param parent1	A pointer to its last move
 	 */
 	public Tile (int state1[][], int numMoves1, int heuristic1, int cost1, Tile parent1) {
-		
+
 		state = state1;
 		numMoves = numMoves1;
 		heuristic = heuristic1;
@@ -48,7 +48,7 @@ public class Tile implements Comparable<Tile> {
 		parent = parent1;
 		status = true;
 	}
-	
+
 	public int state[][];
 	public int numMoves;
 	public int heuristic;

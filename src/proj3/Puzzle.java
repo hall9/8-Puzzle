@@ -19,13 +19,15 @@ public class Puzzle {
 	 * @param initial	This is the initial state which is given
 	 * @param g	this is the given goal state which is given
 	 */
-	
 	public void solve(int initial[][], int g[][]) {
 		openQ.makeEmpty();
 		goal = g;
 
 		Tile initialTile = new Tile(initial, 0, heuristic(goal,initial), heuristic(goal,initial), null);
 
+		System.out.println("[*]Initial State(S0)");
+		System.out.println("[*]======================");
+		System.out.println("");
 		printTile(initialTile);
 
 		if (initial == goal) {
@@ -142,7 +144,7 @@ public class Puzzle {
 		Tile right = new Tile(null, 99,99,99, current);
 		Tile left = new Tile(null, 99,99,99, current);
 		Tile up = new Tile(null, 99,99,99, current);	
-		
+
 		//Moving Right
 		if (x != 2) {
 			right.state = clone2dArray(current.state);
@@ -156,7 +158,7 @@ public class Puzzle {
 				openQ.insert(right);
 			}
 		}
-		
+
 		//Moving Left
 		if (x != 0) {
 			left.state = clone2dArray(current.state);

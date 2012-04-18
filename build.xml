@@ -98,9 +98,9 @@ Update: D. Frey, 1/9/12 add debug to javac command
   </description>
   
   <!-- global properties for this build file -->
-  <property name="source.dir" location="src/Proj3"/>
-  <property name="build.dir" location="bin/Proj3"/>
-  <property name="doc.dir" location="doc/Proj3"/>
+  <property name="source.dir" location="src/proj3"/>
+  <property name="build.dir" location="bin/proj3"/>
+  <property name="doc.dir" location="doc/proj3"/>
   <property name="main.class" value="proj3/Proj3"/>
   
   <!-- set up some directories used by this project -->
@@ -115,7 +115,7 @@ Update: D. Frey, 1/9/12 add debug to javac command
   </target>
 
   <!-- execute the program with the fully qualified name in ${build.dir} after compiling -->
-  <target name="run" description="run the project">
+  <target name="run" depends="compile" description="run the project">
     <java classpath="${build.dir}" classname="${main.class}" fork="yes">
      <arg line="${args}"/>
     </java>
@@ -131,8 +131,8 @@ Update: D. Frey, 1/9/12 add debug to javac command
   </target>
 
   <!-- Generate javadocs for current project into ${doc.dir} -->
-  <target name="doc" depends="init" description="generate documentation">
-    <javadoc sourcepath="${source.dir}" destdir="${doc.dir}"/>
+  <target name="doc" depends="compile" description="generate documentation">
+    <javadoc sourcepath="${source.dir}" destdir="${doc.dir}" packagenames="*" sourcefiles="${source.dir}/Puzzle.java,${source.dir}/Tile.java,${source.dir}/Proj3.java,${source.dir}/BinaryHeap.java"/>
   </target>
 
 </project>
